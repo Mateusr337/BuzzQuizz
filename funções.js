@@ -1,6 +1,11 @@
 const paginaQuizz = document.querySelector('.exibirQuizz');
 const telaInicial = document.querySelector('.telaInicial');
 
+let respondidoCorretamente = 0;
+let quantidadePerguntasRespondidas = 0;
+let quantidadePerguntas;
+let niveis = [];
+let idQuizzAberto;
 chamarQuizzes();
 
 function comparador() { 
@@ -26,6 +31,8 @@ function imprimirQuizzes(resposta){
 }
 
 function carregarQuizz(idQuizz){
+    idQuizzAberto = idQuizz;
+
     const promessa = axios.get(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${idQuizz}`);
     promessa.then(exibirQuizz);
 }
@@ -33,6 +40,9 @@ function carregarQuizz(idQuizz){
 function exibirQuizz(resposta){
     telaInicial.classList.add('sumir');
     paginaQuizz.classList.remove('sumir');
+
+    quantidadePerguntas = resposta.data.questions.length;
+    niveis = resposta.data.levels;
     
     paginaQuizz.innerHTML = `
     <div class="imagemQuizz" style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url('${resposta.data.image}')">
@@ -82,11 +92,16 @@ function selecionandoResposta(alternativaSelecionada){
     }
     const alternativas = alternativaSelecionada.parentNode.children;
     
+    quantidadePerguntasRespondidas++;
+    if(alternativaSelecionada.classList.contains('true')){
+        respondidoCorretamente++;
+    }
+    
     for(let i = 0; i < alternativas.length; i++){
 
         if( alternativas[i].classList.contains('false') ){
             alternativas[i].classList.add('naoCorreta');
-        }else if( alternativas[i].classList.contains('true') ){
+        }else{
             alternativas[i].classList.add('correta');
         }
 
@@ -96,4 +111,48 @@ function selecionandoResposta(alternativaSelecionada){
             alternativas[i].classList.add('naoSelecionada')
         }
     }
+    if(quantidadePerguntas === quantidadePerguntasRespondidas){
+        verificarQuizzRespondido();
+    }
+}
+
+function verificarQuizzRespondido(){
+    const porcentagemAcerto = (respondidoCorretamente / quantidadePerguntas) * 100;
+    let desempenho;
+
+    for(let i = 0; i < niveis.length; i++){
+        if(porcentagemAcerto >= niveis[i].minValue){
+            desempenho = niveis[i];
+        }
+    }
+
+    const conteudoQuizz = document.querySelector('.exibirQuizz main');
+
+    conteudoQuizz.innerHTML += `
+    <div class="pergunta final">
+        <div class="texto">
+            Você acertou: ${porcentagemAcerto.toFixed(2)}% - ${desempenho.title}
+        </div>
+
+        <div class="imagem"><img src="${desempenho.image}" alt=""></div>
+        <span>${desempenho.text}</span>
+
+        <div class="botoes">
+            <button class="reiniciar" onclick="carregarQuizz(${idQuizzAberto})">Reiniciar Quizz</button>
+            <button class="voltarHome" onclick="voltarHome()">Voltar para home</button>
+        </div>
+    </div>`
+
+    respondidoCorretamente = 0;
+    quantidadePerguntasRespondidas = 0;
+    quantidadePerguntas = 0;
+    niveis = [];
+    idQuizzAberto = "";
+}
+
+function voltarHome(telaSaida){
+    paginaQuizz.classList.add('sumir');
+    telaInicial.classList.remove('sumir');
+
+    chamarQuizzes();
 }
