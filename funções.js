@@ -3,13 +3,33 @@ const telaInicial = document.querySelector('.telaInicial');
 const sectionCarregando = document.querySelector('.telaCarregamento');
 const criarQuizzInfo = document.querySelector('.Info.criandoQuizz');
 const criarQuizzPerguntas = document.querySelector('.criandoQuizz.perguntas');
+const criarQuizzNiveis = document.querySelector('.criandoQuizz.niveis');
+const criandoQuizzFinal = document.querySelector('.criandoQuizz.geralQuizzDados');
 
 let respondidoCorretamente = 0;
 let quantidadePerguntasRespondidas = 0;
 let quantidadePerguntas;
 let niveis = [];
 let idQuizzAberto;
+
+let title = "";
+let image = "";
+let questions = [];
+let levels = [];
+
+let Qtdperguntas = 0;
+let Qtdniveis = 0;
+
+let quizzesUsuario = [];
+
 chamarQuizzes();
+
+function trocarTela(sectionSumir, sectionAparecer){
+    sectionSumir.classList.add('sumir');
+    sectionAparecer.classList.remove('sumir');
+    
+    window.scrollTo(0, 0);
+}
 
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -19,6 +39,9 @@ function chamarQuizzes(){
     sectionCarregando.classList.remove('sumir');
     const promessa = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes');
     promessa.then(imprimirQuizzes);
+    promessa.catch(()=>{
+    sectionCarregando.classList.add('sumir');
+    })
 }                
 
 function imprimirQuizzes(resposta){
@@ -138,15 +161,17 @@ function verificarQuizzRespondido(){
     conteudoQuizz.innerHTML += `
     <div class="pergunta final">
         <div class="texto">
-            Você acertou: ${porcentagemAcerto.toFixed(2)}% - ${desempenho.title}
+            Você acertou: ${porcentagemAcerto.toFixed(0)}% - ${desempenho.title}
         </div>
 
-        <div class="imagem"><img src="${desempenho.image}" alt=""></div>
-        <span>${desempenho.text}</span>
+        <div class="imagem">
+            <img src="${desempenho.image}" alt="">
+            <span>${desempenho.text}</span>
+        </div>
 
         <div class="botoes">
             <button class="reiniciar" onclick="carregarQuizz(${idQuizzAberto})">Reiniciar Quizz</button>
-            <button class="voltarHome" onclick="voltarHome()">Voltar para home</button>
+            <button class="voltarHome" onclick="trocarTela(paginaQuizz, telaInicial), chamarQuizzes()">Voltar para home</button>
         </div>
     </div>`
 
@@ -157,19 +182,173 @@ function verificarQuizzRespondido(){
     idQuizzAberto = "";
 }
 
-function voltarHome(telaSaida){
-    paginaQuizz.classList.add('sumir');
-    telaInicial.classList.remove('sumir');
-
-    chamarQuizzes();
+function limparInputs(){
+    document.querySelector('.Info .tituloQuizz').value="";
+    document.querySelector('.Info .URLQuizz').value="";
+    document.querySelector('.Info .QtdPerguntasQuizz').value="";
+    document.querySelector('.Info .QtdNiveisQuizz').value="";
 }
 
-function criarQuizz(){
-    telaInicial.classList.add('sumir');
-    criarQuizzInfo.classList.remove('sumir');
+function verificarInfosCriandoQuizz(){
+    title = document.querySelector('.Info .tituloQuizz').value;
+    image = document.querySelector('.Info .URLQuizz').value;
+    Qtdperguntas = document.querySelector('.Info .QtdPerguntasQuizz').value;
+    Qtdniveis = document.querySelector('.Info .QtdNiveisQuizz').value;
+
+    trocarTela(criarQuizzInfo, criarQuizzPerguntas);
+    carregarPaginaCriarPerguntas();
+    limparInputs();
 }
 
-function criarPerguntas(){
-    criarQuizzInfo.classList.add('sumir');
-    criarQuizzPerguntas.classList.remove('sumir');
+function carregarPaginaCriarPerguntas(){
+    const conteudo = document.querySelector('.perguntas main');
+    conteudo.innerHTML = `<span class="titulo">Crie suas perguntas</span>`;
+    let classe;
+    
+    for(let i = 0; i < Qtdperguntas; i++){
+        if(i === 0){
+            classe = "editando";
+        }else{
+            classe = "";
+        }
+        conteudo.innerHTML += `
+        <div class="caixas ${classe}">
+                <span class="subTitulo">
+                    Pergunta ${i+1} <img onclick="preenchendoDados(this, 'perguntas')" src="/imagens/editar.png" alt="">
+                </span>
+
+                <div class="conteudo">
+                    <input class="textoPergunta" type="text" placeholder="Texto da pergunta">
+                    <input class="CorPergunta" type="text" placeholder="Cor de fundo da pergunta">
+                    <span class="subTitulo">Resposta correta</span>
+                    <input class="respostaCorreta" type="text" placeholder="Resposta correta">
+                    <input class="URLrespostaCorreta" type="text" placeholder="URL da imagem">
+                    <span class="subTitulo">Repostas Incorretas</span>
+                    <input class="respostaIncorreta1" type="text" placeholder="Resposta incorreta 1">
+                    <input class="URLrespostaIncorreta1" type="text" placeholder="URL da imagem 1">
+                    <br>
+                    <input class="respostaIncorreta2" type="text" placeholder="Resposta incorreta 2">
+                    <input class="URLrespostaIncorreta2" type="text" placeholder="URL da imagem 2">
+                    <br>
+                    <input class="respostaIncorreta3" type="text" placeholder="Resposta incorreta 3">
+                    <input class="URLrespostaIncorreta3" type="text" placeholder="URL da imagem 3">
+                </div>
+            </div>`
+    }
+    conteudo.innerHTML += `<button onclick="validarDadosPerguntas()">Prosseguir pra criar níveis</button>` 
 }
+
+function validarDadosPerguntas(){
+    const textoPerguntas = document.querySelectorAll('.perguntas .textoPergunta');
+    const CorPerguntas = document.querySelectorAll('.perguntas .CorPergunta');
+    const respostasCorretas = document.querySelectorAll('.perguntas .respostaCorreta');
+    const imagensRespostasCorretas = document.querySelectorAll('.perguntas .URLrespostaCorreta');
+
+    const respostasIncorretas1 = document.querySelectorAll('.perguntas .respostaIncorreta1');
+    const imagensRespostasIncorretas1 = document.querySelectorAll('.perguntas .URLrespostaIncorreta1');
+
+    const respostasIncorretas2 = document.querySelectorAll('.perguntas .respostaIncorreta2');
+    const imagensRespostasIncorretas2 = document.querySelectorAll('.perguntas .URLrespostaIncorreta2');
+
+    const respostasIncorretas3 = document.querySelectorAll('.perguntas .respostaIncorreta3');
+    const imagensRespostasIncorretas3 = document.querySelectorAll('.perguntas .URLrespostaIncorreta3');
+
+    questions = [];
+
+    for (let i = 0; i < Qtdperguntas; i++){
+        questions.push({ title: textoPerguntas[i].value, color: CorPerguntas[i].value, answers: [] });
+        questions[i].answers.push({ text: respostasCorretas[i].value, image: imagensRespostasCorretas[i].value, isCorrectAnswer: true });
+
+        questions[i].answers.push({ text: respostasIncorretas1[i].value, image: imagensRespostasIncorretas1[i].value, isCorrectAnswer: false });
+        questions[i].answers.push({ text: respostasIncorretas2[i].value, image: imagensRespostasIncorretas2[i].value, isCorrectAnswer: false });
+        questions[i].answers.push({ text: respostasIncorretas3[i].value, image: imagensRespostasIncorretas3[i].value, isCorrectAnswer: false });
+    }
+
+    trocarTela(criarQuizzPerguntas, criarQuizzNiveis);
+    carregarPaginaCriarNiveis();
+}
+
+function carregarPaginaCriarNiveis(){
+    const conteudo = document.querySelector('.niveis main');
+    conteudo.innerHTML = `<span class="titulo">Agora, decida os níveis!</span>`;
+    let classe;
+
+    for(let i = 0; i < Qtdniveis; i++){
+        if(i === 0){
+            classe = "editando";
+        }else{
+            classe = "";
+        }
+        conteudo.innerHTML += `
+        <div class="caixas ${classe}">
+            <span class="subTitulo">
+                Nível ${i+1}
+                <img onclick="preenchendoDados(this, 'niveis')" src="/imagens/editar.png" alt="">
+            </span>
+
+            <div class="conteudo">
+                <input class="tituloNivel" type="text" placeholder="Título do nível">
+                <input class="PorcentagemAcertosNivel" type="text" placeholder="% de acerto mínima">
+                <input class="URLnivel" type="text" placeholder="URL da imagem do nível">
+                <input class="descricaoNivel" type="text" placeholder="Descrição do nível">
+            </div>
+        </div>`
+    }
+    conteudo.innerHTML += `<button onclick="validarDadosNiveis()">Finalizar Quizz</button>`
+}
+
+function validarDadosNiveis(){
+    const tituloNivel = document.querySelectorAll('.niveis .tituloNivel');
+    const PorcentagemAcertos = document.querySelectorAll('.niveis .PorcentagemAcertosNivel');
+    const imagemNivel = document.querySelectorAll('.niveis .URLnivel');
+    const descricaoNivel = document.querySelectorAll('.niveis .descricaoNivel');
+
+    levels = [];
+
+    for (let i = 0; i < Qtdniveis; i++) {
+        levels.push({ title: tituloNivel[i].value, image: imagemNivel[i].value, text: descricaoNivel[i].value, minValue: parseInt(PorcentagemAcertos[i].value) });
+    }
+
+    enviarQuizzServidor();
+}
+
+function enviarQuizzServidor(){
+    sectionCarregando.classList.remove('sumir');
+
+    const quizzCriado = {title, image, questions, levels};
+    const promessa = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', quizzCriado);
+
+    promessa.then((resposta) => {
+        trocarTela(criarQuizzNiveis, criandoQuizzFinal);
+        sectionCarregando.classList.add('sumir');
+
+        quizzesUsuario.push(resposta);
+    });
+
+    promessa.catch(() =>{
+    sectionCarregando.classList.add('sumir');
+    })
+}
+
+function carregarPaginaQuizzCriado(){
+    const titulo = document.querySelector('.geralQuizzDados .imagem span');
+    const imagem = document.querySelector('.geralQuizzDados .imagem');
+
+    imagem.style = `background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${image})`
+    titulo.innerHTML = title;
+}
+
+function preenchendoDados(elementoSelecionado, tipoElemento){
+    let elementoEditando;
+    if(tipoElemento === 'perguntas'){
+        elementoEditando = document.querySelector('.perguntas .editando');
+        elementoSelecionado = elementoSelecionado.parentNode.parentNode;
+    }else if(tipoElemento === 'niveis'){
+        elementoEditando = document.querySelector('.niveis .editando');
+        elementoSelecionado = elementoSelecionado.parentNode.parentNode;
+    }
+
+    elementoEditando.classList.remove('editando');
+    elementoSelecionado.classList.add('editando');
+}
+

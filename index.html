@@ -20,11 +20,11 @@
 
     <header>BuzzQuizz</header>
     
-    <section class="telaInicial sumir">
+    <section class="telaInicial">
         <main>
             <div class="quizzesUsuario">
                 <span>Você não criou nenhum <br> quizz ainda :(</span>
-                <button onclick="criarQuizz()">Criar Quizz</button>
+                <button onclick="trocarTela(telaInicial, criarQuizzInfo)">Criar Quizz</button>
             </div>
 
             <span class="subTitulo">Todos os Quizzes</span>
@@ -53,64 +53,30 @@
                 <input class="QtdNiveisQuizz" type="text" placeholder="Quantidade de níveis do quizz">
             </div>
 
-            <button onclick="criarPerguntas()">Prosseguir pra criar perguntas</button>
+            <button onclick="verificarInfosCriandoQuizz()">Prosseguir pra criar perguntas</button>
         </main>
     </section>
 
     <section class="criandoQuizz perguntas sumir">
-        <main>
-
-            <span class="titulo">Crie suas perguntas</span>
-            <div class="caixas">
-
-                <span class="subTitulo">
-                    Pergunta 1 <img src="/imagens/editar.png" alt="">
-                </span>
-
-                <div class="conteudo">
-                    <input class="textoPergunta" type="text" placeholder="Texto da pergunta">
-                    <input class="CorPergunta" type="text" placeholder="Cor de fundo da pergunta">
-                    <span class="subTitulo">Resposta correta</span>
-                    <input class="respostaCorreta" type="text" placeholder="Resposta correta">
-                    <input class="URLrespostaCorreta" type="text" placeholder="URL da imagem">
-                    <span class="subTitulo">Repostas Incorretas</span>
-                    <input class="respostaIncorreta" type="text" placeholder="Resposta incorreta 1">
-                    <input class="URLrespostaIncorreta" type="text" placeholder="URL da imagem 1">
-                    <br>
-                    <input class="respostaIncorreta" type="text" placeholder="Resposta incorreta 2">
-                    <input class="URLrespostaIncorreta" type="text" placeholder="URL da imagem 2">
-                    <br>
-                    <input class="respostaIncorreta" type="text" placeholder="Resposta incorreta 3">
-                    <input class="URLrespostaIncorreta" type="text" placeholder="URL da imagem 3">
-                </div>
-
-            </div>
-
-            <button>Prosseguir pra criar níveis</button>
-        </main>
+        <main></main>
     </section>
 
     <section class="criandoQuizz niveis sumir">
-        <main>
-            <span class="titulo">Agora, decida os níveis!</span>
-            <div class="caixas">
-
-                <span class="subTitulo">
-                    Nível 1
-                    <img src="/imagens/editar.png" alt="">
-                </span>
-
-                <div class="conteudo">
-                    <input class="tituloNivel" type="text" placeholder="Título do nível">
-                    <input class="PorcentagemAcertosNivel" type="text" placeholder="% de acerto mínima">
-                    <input class="URLnivel" type="text" placeholder="URL da imagem do nível">
-                    <input class="descricaoNivel" type="text" placeholder="Descrição do nível">
-                </div>
-            </div>
-        </main>
+        <main></main>
     </section>
 
-    <section class="criandoQuizz geralQuizzDados"></section>
+    <section class="criandoQuizz geralQuizzDados sumir">
+        <main>
+            <span class="titulo">Seu quizz está pronto!</span>
+
+            <div class="imagem">
+                <span></span>
+            </div>
+
+            <button>Acessar Quizz</button>
+            <button onclick="trocarTela(criandoQuizzFinal, telaInicial), chamarQuizzes()" class="voltarHome">Voltar para home</button>
+        </main>
+    </section>
 
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

@@ -109,7 +109,7 @@ body{
     background-color: #EC362D;
 }
 
-.exibirQuizz .final .imagem, .exibirQuizz .final span{
+.exibirQuizz .final .imagem img, .exibirQuizz .final span{
     width: 48%;
 
     color: #484848;
@@ -121,8 +121,10 @@ body{
     overflow: hidden;
 }
 
-.exibirQuizz .final .imagem img{
+.exibirQuizz .final .imagem{
     width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 .exibirQuizz .final .botoes{
@@ -173,10 +175,11 @@ body{
     padding-top: 20%;
 
     position: fixed;
+    z-index: 3;
 }
 
 .telaCarregamento .carregando{
-    width: 300px;
+    width: 250px;
     padding: 25px;
     gap: 40px;
 

@@ -37,12 +37,24 @@
 
 .criandoQuizz .conteudo{
     width: 100%;
+    height: 0;
+
     gap: 9px;
     
     background-color: #ffffff;
     
     display: flex;
     flex-direction: column;
+
+    overflow: hidden;
+}
+
+.criandoQuizz .editando .conteudo{
+    height: auto;
+}
+
+.criandoQuizz .editando .subTitulo img{
+    display: none;
 }
 
 .criandoQuizz .caixas input{
@@ -91,8 +103,44 @@
     height: 26px;
 }
 
+.geralQuizzDados{
+    background-color: #ffffff;
+}
+
+.geralQuizzDados .voltarHome{
+    background-color: #ffffff;
+    color: #818181;
+}
+
+.geralQuizzDados .imagem{
+    width: 90%;
+    height: 266px;
+
+    margin-bottom: 35px;
+
+    color: #ffffff;
+    font-size: 23px;
+    line-height: 27px;
+
+    position: relative;
+}
+
+.geralQuizzDados .imagem span{
+    position: absolute;
+    left: 15px;
+    bottom: 25px;
+}
+
+.geralQuizzDados button{
+    margin: 0;
+}
+
 .sumir{
     display: none;
+}
+
+.criandoQuizz .subTitulo img:hover{
+    cursor: pointer;
 }
 
 @media(max-width: 1100px){
