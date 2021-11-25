@@ -1,5 +1,8 @@
 const paginaQuizz = document.querySelector('.exibirQuizz');
 const telaInicial = document.querySelector('.telaInicial');
+const sectionCarregando = document.querySelector('.telaCarregamento');
+const criarQuizzInfo = document.querySelector('.Info.criandoQuizz');
+const criarQuizzPerguntas = document.querySelector('.criandoQuizz.perguntas');
 
 let respondidoCorretamente = 0;
 let quantidadePerguntasRespondidas = 0;
@@ -13,6 +16,7 @@ function comparador() {
 }
 
 function chamarQuizzes(){
+    sectionCarregando.classList.remove('sumir');
     const promessa = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes');
     promessa.then(imprimirQuizzes);
 }                
@@ -28,6 +32,7 @@ function imprimirQuizzes(resposta){
         onclick="carregarQuizz(${resposta.data[i].id})">
         <span>${resposta.data[i].title}</span>`
     }
+    sectionCarregando.classList.add('sumir');
 }
 
 function carregarQuizz(idQuizz){
@@ -38,6 +43,7 @@ function carregarQuizz(idQuizz){
 }
 
 function exibirQuizz(resposta){
+    sectionCarregando.classList.remove('sumir');
     telaInicial.classList.add('sumir');
     paginaQuizz.classList.remove('sumir');
 
@@ -84,6 +90,7 @@ function exibirQuizz(resposta){
     }
     const imagemTopo = document.querySelector('.exibirQuizz .imagemQuizz');
     imagemTopo.scrollIntoView();
+    sectionCarregando.classList.add("sumir");
 }
 
 function selecionandoResposta(alternativaSelecionada){
@@ -155,4 +162,14 @@ function voltarHome(telaSaida){
     telaInicial.classList.remove('sumir');
 
     chamarQuizzes();
+}
+
+function criarQuizz(){
+    telaInicial.classList.add('sumir');
+    criarQuizzInfo.classList.remove('sumir');
+}
+
+function criarPerguntas(){
+    criarQuizzInfo.classList.add('sumir');
+    criarQuizzPerguntas.classList.remove('sumir');
 }
