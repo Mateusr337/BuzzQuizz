@@ -172,7 +172,7 @@ body{
 }
 
 .telaCarregamento{
-    padding-top: 20%;
+    padding-top: 90px;
 
     position: fixed;
     z-index: 3;

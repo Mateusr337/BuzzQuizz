@@ -20,8 +20,7 @@ let levels = [];
 let Qtdperguntas = 0;
 let Qtdniveis = 0;
 
-let quizzesUsuario = [];
-
+if (localStorage.length === 0) {localStorage.setItem("quizzesUsuario" , JSON.stringify({ids: [] , keys: []}))}
 chamarQuizzes();
 
 function trocarTela(sectionSumir, sectionAparecer){
@@ -39,6 +38,7 @@ function chamarQuizzes(){
     sectionCarregando.classList.remove('sumir');
     const promessa = axios.get('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes');
     promessa.then(imprimirQuizzes);
+
     promessa.catch(()=>{
     sectionCarregando.classList.add('sumir');
     })
@@ -46,16 +46,51 @@ function chamarQuizzes(){
 
 function imprimirQuizzes(resposta){
     const todosQuizzes = document.querySelector('.telaInicial .todosQuizzes');
+    const quizzesUsuario = document.querySelector('.telaInicial .quizzesUsuario');
+    let destinoQuizz;
     todosQuizzes.innerHTML = "";
 
     for(let i = 0; i < resposta.data.length; i++){
-        todosQuizzes.innerHTML += `
-        <div class="quizz" 
-        style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
-        onclick="carregarQuizz(${resposta.data[i].id})">
-        <span>${resposta.data[i].title}</span>`
+
+        if (verficaQuizz(resposta.data[i].id)){
+            destinoQuizz = quizzesUsuario;
+            mudarSeusQuizzes(quizzesUsuario);
+
+        }else{
+            destinoQuizz = todosQuizzes;
+        }
+        destinoQuizz.innerHTML += `
+            <div class="quizz" 
+            style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
+            onclick="carregarQuizz(${resposta.data[i].id})">
+            <span>${resposta.data[i].title}</span>
+            </div>`
     }
     sectionCarregando.classList.add('sumir');
+}
+
+function mudarSeusQuizzes(quizzesUsuario){
+    quizzesUsuario.innerHTML = `
+    <span class="subTitulo">
+        Seus Quizzes 
+        <ion-icon class="icone" name="add-circle-sharp"></ion-icon> 
+    </span> `
+
+    quizzesUsuario.style = "border: none;"
+}
+
+function estilizarQuizzesUsuario(quizzesUsuario){
+    quizzesUsuario.innerHTML =`<div class="">  </div>`;
+    quizzesUsuario.style = "border: none;"
+}
+
+function verficaQuizz(quizz){
+    verificaQuizzesUsuario = JSON.parse(localStorage.getItem("quizzesUsuario"))
+  
+    for(let i = 0 ; i < verificaQuizzesUsuario.ids.length ; i++){
+      if (verificaQuizzesUsuario.ids[i] == quizz) {return true}
+    }
+    return false;
 }
 
 function carregarQuizz(idQuizz){
@@ -322,7 +357,15 @@ function enviarQuizzServidor(){
         trocarTela(criarQuizzNiveis, criandoQuizzFinal);
         sectionCarregando.classList.add('sumir');
 
-        quizzesUsuario.push(resposta);
+        carregarPaginaQuizzCriado(resposta);
+
+        let quizzesUsuario = JSON.parse(localStorage.getItem("quizzesUsuario"));
+
+        quizzesUsuario.ids.push(resposta.data.id);
+        quizzesUsuario.keys.push(resposta.data.key);
+
+        quizzesUsuario = JSON.stringify(quizzesUsuario);
+        localStorage.setItem("quizzesUsuario" , quizzesUsuario);
     });
 
     promessa.catch(() =>{
@@ -330,12 +373,15 @@ function enviarQuizzServidor(){
     })
 }
 
-function carregarPaginaQuizzCriado(){
+function carregarPaginaQuizzCriado(resposta){
     const titulo = document.querySelector('.geralQuizzDados .imagem span');
     const imagem = document.querySelector('.geralQuizzDados .imagem');
+    const botaoIniciarQuizz = document.querySelector('.geralQuizzDados main .acessarQuizz');
 
     imagem.style = `background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${image})`
     titulo.innerHTML = title;
+
+    botaoIniciarQuizz.setAttribute(`onclick`, `carregarQuizz(${resposta.data.id})`);
 }
 
 function preenchendoDados(elementoSelecionado, tipoElemento){

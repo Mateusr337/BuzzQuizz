@@ -58,6 +58,7 @@ header{
 
 .telaInicial main{
     width: 1051px;
+    padding-top: 40px;
 }
 
 .telaInicial .quizzesUsuario{
@@ -75,7 +76,7 @@ header{
     align-items: center;
 }
 
-.telaInicial .quizzesUsuario span{
+.telaInicial .quizzesUsuario .semQuizz{
     color: #B9B9B9;
     font-size: 20px;
     line-height: 23px;
@@ -108,9 +109,9 @@ header{
     
     background-repeat: no-repeat;
     background-size: 100%;
-  }
+}
   
-  .quizz span {
+.quizz span {
     max-width: 100%;
 
     padding: 20px;
@@ -122,7 +123,7 @@ header{
 
     text-align: center;
     word-wrap: break-word;
-  }
+}
 
   .telaInicial .todosQuizzes{
       padding-top: 10px;
@@ -136,13 +137,27 @@ header{
       cursor: pointer;
   }
 
+  .telaInicial .subTitulo{
+      width: 100%;
+      height: 50px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  .telaInicial .subTitulo .icone{
+      color: #EC362D;
+  }
+
   @media (max-width: 1100px){
       .telaInicial main{
-          max-width: 95vh;
+          max-width: 95%;
       }
 
       .telaInicial .quizz{
-          width: 100%;
+          max-width: 100%;
+          min-width: 100%;
           padding-top: 50%;
       }
   }

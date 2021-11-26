@@ -22,13 +22,16 @@
     
     <section class="telaInicial">
         <main>
+
             <div class="quizzesUsuario">
-                <span>Você não criou nenhum <br> quizz ainda :(</span>
+                <span class="semQuizz">Você não criou nenhum <br> quizz ainda :(</span>
                 <button onclick="trocarTela(telaInicial, criarQuizzInfo)">Criar Quizz</button>
             </div>
 
-            <span class="subTitulo">Todos os Quizzes</span>
-            <div class="todosQuizzes"></div>
+            <div>
+                <span class="subTitulo">Todos os Quizzes</span>
+                <div class="todosQuizzes"></div>
+            </div>
 
         </main>
     </section>
@@ -73,11 +76,13 @@
                 <span></span>
             </div>
 
-            <button>Acessar Quizz</button>
+            <button class="acessarQuizz">Acessar Quizz</button>
             <button onclick="trocarTela(criandoQuizzFinal, telaInicial), chamarQuizzes()" class="voltarHome">Voltar para home</button>
         </main>
     </section>
 
+
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="funções.js"></script>
