@@ -21,6 +21,7 @@ let Qtdperguntas = 0;
 let Qtdniveis = 0;
 
 if (localStorage.length === 0) {localStorage.setItem("quizzesUsuario" , JSON.stringify({ids: [] , keys: []}))}
+
 chamarQuizzes();
 
 function trocarTela(sectionSumir, sectionAparecer){
@@ -40,7 +41,7 @@ function chamarQuizzes(){
     promessa.then(imprimirQuizzes);
 
     promessa.catch(()=>{
-    sectionCarregando.classList.add('sumir');
+        chamarQuizzes();
     })
 }                
 
@@ -62,7 +63,7 @@ function imprimirQuizzes(resposta){
         destinoQuizz.innerHTML += `
             <div class="quizz" 
             style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
-            onclick="carregarQuizz(${resposta.data[i].id})">
+            onclick="carregarQuizz(${resposta.data[i].id}); trocarTela( telaInicial, paginaQuizz)">
             <span>${resposta.data[i].title}</span>
             </div>`
     }
@@ -73,7 +74,7 @@ function mudarSeusQuizzes(quizzesUsuario){
     quizzesUsuario.innerHTML = `
     <span class="subTitulo">
         Seus Quizzes 
-        <ion-icon class="icone" name="add-circle-sharp"></ion-icon> 
+        <ion-icon class="icone" name="add-circle-sharp" onclick="trocarTela(telaInicial, criarQuizzInfo)"></ion-icon> 
     </span> `
 
     quizzesUsuario.style = "border: none;"
@@ -102,8 +103,7 @@ function carregarQuizz(idQuizz){
 
 function exibirQuizz(resposta){
     sectionCarregando.classList.remove('sumir');
-    telaInicial.classList.add('sumir');
-    paginaQuizz.classList.remove('sumir');
+    trocarTela( telaInicial, paginaQuizz)
 
     quantidadePerguntas = resposta.data.questions.length;
     niveis = resposta.data.levels;
@@ -276,6 +276,7 @@ function carregarPaginaCriarPerguntas(){
 function validarDadosPerguntas(){
     const textoPerguntas = document.querySelectorAll('.perguntas .textoPergunta');
     const CorPerguntas = document.querySelectorAll('.perguntas .CorPergunta');
+
     const respostasCorretas = document.querySelectorAll('.perguntas .respostaCorreta');
     const imagensRespostasCorretas = document.querySelectorAll('.perguntas .URLrespostaCorreta');
 
@@ -294,9 +295,14 @@ function validarDadosPerguntas(){
         questions.push({ title: textoPerguntas[i].value, color: CorPerguntas[i].value, answers: [] });
         questions[i].answers.push({ text: respostasCorretas[i].value, image: imagensRespostasCorretas[i].value, isCorrectAnswer: true });
 
-        questions[i].answers.push({ text: respostasIncorretas1[i].value, image: imagensRespostasIncorretas1[i].value, isCorrectAnswer: false });
-        questions[i].answers.push({ text: respostasIncorretas2[i].value, image: imagensRespostasIncorretas2[i].value, isCorrectAnswer: false });
-        questions[i].answers.push({ text: respostasIncorretas3[i].value, image: imagensRespostasIncorretas3[i].value, isCorrectAnswer: false });
+        if (respostasIncorretas1[i].value !== "")
+            questions[i].answers.push({ text: respostasIncorretas1[i].value, image: imagensRespostasIncorretas1[i].value, isCorrectAnswer: false });
+
+        if (respostasIncorretas2[i].value !== "")
+            questions[i].answers.push({ text: respostasIncorretas2[i].value, image: imagensRespostasIncorretas2[i].value, isCorrectAnswer: false });
+
+        if (respostasIncorretas3[i].value !== "")
+            questions[i].answers.push({ text: respostasIncorretas3[i].value, image: imagensRespostasIncorretas3[i].value, isCorrectAnswer: false });
     }
 
     trocarTela(criarQuizzPerguntas, criarQuizzNiveis);
@@ -381,7 +387,7 @@ function carregarPaginaQuizzCriado(resposta){
     imagem.style = `background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${image})`
     titulo.innerHTML = title;
 
-    botaoIniciarQuizz.setAttribute(`onclick`, `carregarQuizz(${resposta.data.id})`);
+    botaoIniciarQuizz.setAttribute(`onclick`, `carregarQuizz(${resposta.data.id}); trocarTela( criandoQuizzFinal, paginaQuizz)`);
 }
 
 function preenchendoDados(elementoSelecionado, tipoElemento){
@@ -397,4 +403,3 @@ function preenchendoDados(elementoSelecionado, tipoElemento){
     elementoEditando.classList.remove('editando');
     elementoSelecionado.classList.add('editando');
 }
-
