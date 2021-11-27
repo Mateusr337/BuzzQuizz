@@ -146,6 +146,10 @@ header{
     font-weight: bold;
 }
 
+.quizz,ion-icon, button:hover{
+    cursor: pointer;
+}
+
 .subTitulo ion-icon{ 
     padding-left: 5px;
 
@@ -164,6 +168,14 @@ header{
           min-width: 100%;
           padding-top: 50%;
       }
+
+      .telaInicial .subTitulo{
+        width: 100%;
+  
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
   }
 
   .sumir{
