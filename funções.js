@@ -50,8 +50,6 @@ function chamarQuizzes(){
 }                
 
 function imprimirQuizzes(resposta){
-
-    let destinoQuizz;
     
     if (JSON.parse(localStorage.getItem("quizzesUsuario")).ids.length !== 0){
         comQuizzes.classList.remove("sumir")
@@ -69,18 +67,23 @@ function imprimirQuizzes(resposta){
     for(let i = 0; i < resposta.data.length; i++){
 
         if (verficaQuizz(resposta.data[i].id)){
-            destinoQuizz = sectionQuizzesUsuario;
+
+            sectionQuizzesUsuario.innerHTML += `
+                <div class="quizz" 
+                style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
+                onclick="carregarQuizz(${resposta.data[i].id}); trocarTela( telaInicial, paginaQuizz)">
+                <span>${resposta.data[i].title}</span>
+                </div>`
         }
         else{
-            destinoQuizz = todosQuizzes;
-        }
 
-        destinoQuizz.innerHTML += `
-            <div class="quizz" 
-            style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
-            onclick="carregarQuizz(${resposta.data[i].id}); trocarTela( telaInicial, paginaQuizz)">
-            <span>${resposta.data[i].title}</span>
-            </div>`
+            todosQuizzes.innerHTML += `
+                <div class="quizz" 
+                style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
+                onclick="carregarQuizz(${resposta.data[i].id}); trocarTela( telaInicial, paginaQuizz)">
+                <span>${resposta.data[i].title}</span>
+                </div>`
+        }
     }
     sectionCarregando.classList.add('sumir');
 }
