@@ -73,6 +73,10 @@ function imprimirQuizzes(resposta){
                 style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
                 onclick="carregarQuizz(${resposta.data[i].id}); trocarTela( telaInicial, paginaQuizz)">
                 <span>${resposta.data[i].title}</span>
+                <div class="iconesBonus">
+                    <ion-icon name="create-outline"></ion-icon>
+                    <ion-icon name="trash-outline"></ion-icon>
+                </div>
                 </div>`
         }
         else{
@@ -395,6 +399,8 @@ function carregarPaginaQuizzCriado(resposta){
 
 function preenchendoDados(elementoSelecionado, tipoElemento){
     let elementoEditando;
+    const topo = elementoSelecionado.parentNode;
+
     if(tipoElemento === 'perguntas'){
         elementoEditando = document.querySelector('.perguntas .editando');
         elementoSelecionado = elementoSelecionado.parentNode.parentNode;
@@ -405,4 +411,6 @@ function preenchendoDados(elementoSelecionado, tipoElemento){
 
     elementoEditando.classList.remove('editando');
     elementoSelecionado.classList.add('editando');
+
+    topo.scrollIntoView({block: 'center', behavior: "smooth"});
 }

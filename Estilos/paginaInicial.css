@@ -108,6 +108,8 @@ header{
     
     background-repeat: no-repeat;
     background-size: 100%;
+
+    position: relative;
 }
   
 .quizz span {
@@ -144,6 +146,30 @@ header{
 
     font-size: 20px;
     font-weight: bold;
+}
+
+.telaInicial .quizzesUsuario .iconesBonus{
+    width: 30px;
+    height: 70px;
+    gap: 10px;
+
+    color: #FFFFFF;
+    background-color: #EC362D;
+    font-size: 25px;
+    border-radius: 10px 0px 0px 11px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    right: 0;
+    top: 25px;
+}
+
+.telaInicial .quizzesUsuario .iconesBonus ion-icon{
+    width: 20px;
 }
 
 .quizz,ion-icon, button:hover{
