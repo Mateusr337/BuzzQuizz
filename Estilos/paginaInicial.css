@@ -31,11 +31,6 @@ section{
     visibility: hidden;
 }
 
-.subTitulo{
-    font-size: 20px;
-    font-weight: bold;
-}
-
 header{
     width: 100%;
     height: 70px;
@@ -61,7 +56,7 @@ header{
     padding-top: 40px;
 }
 
-.telaInicial .quizzesUsuario{
+.telaInicial .semQuizzes{
     height: 181px;
 
     gap: 20px;
@@ -76,7 +71,7 @@ header{
     align-items: center;
 }
 
-.telaInicial .quizzesUsuario .semQuizz{
+.telaInicial .semQuizzes span{
     color: #B9B9B9;
     font-size: 20px;
     line-height: 23px;
@@ -85,7 +80,7 @@ header{
     text-align: center;
 }
 
-.telaInicial .quizzesUsuario button{
+.telaInicial .semQuizzes button{
     width: 136px;
     height: 40px;
 
@@ -95,6 +90,10 @@ header{
     line-height: 25px;
     border: 2px dashed #EC362D;
     border-radius: 50px;
+}
+
+.comQuizzes {
+    padding-top: 70px;
 }
 
 .quizz {
@@ -125,30 +124,35 @@ header{
     word-wrap: break-word;
 }
 
-  .telaInicial .todosQuizzes{
-      padding-top: 10px;
-      gap: 12px;
+.todosQuizzes , .quizzesUsuario{
+    padding: 10px 0;
+    gap: 12px;
+    display: flex;
+    flex-wrap: wrap;
+}
 
-      display: flex;
-      flex-wrap: wrap;
-  }
+.quizz, button:hover{
+    cursor: pointer;
+}
 
-  .quizz, button:hover{
-      cursor: pointer;
-  }
+.telaInicial .subTitulo{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
-  .telaInicial .subTitulo{
-      width: 100%;
-      height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-  }
+.subTitulo ion-icon{ 
+    padding-left: 5px;
 
-  .telaInicial .subTitulo .icone{
-      color: #EC362D;
-  }
+    font-size: 25px;
+
+    color: #EC362D;
+}
 
   @media (max-width: 1100px){
       .telaInicial main{

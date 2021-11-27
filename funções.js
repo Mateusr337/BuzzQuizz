@@ -1,5 +1,9 @@
 const paginaQuizz = document.querySelector('.exibirQuizz');
 const telaInicial = document.querySelector('.telaInicial');
+const sectionQuizzesUsuario = document.querySelector(".quizzesUsuario")
+const todosQuizzes = document.querySelector(".todosQuizzes")
+const semQuizzes = document.querySelector(".telaInicial main div:first-child")
+const comQuizzes = document.querySelector(".comQuizzes")
 const sectionCarregando = document.querySelector('.telaCarregamento');
 const criarQuizzInfo = document.querySelector('.Info.criandoQuizz');
 const criarQuizzPerguntas = document.querySelector('.criandoQuizz.perguntas');
@@ -46,20 +50,31 @@ function chamarQuizzes(){
 }                
 
 function imprimirQuizzes(resposta){
-    const todosQuizzes = document.querySelector('.telaInicial .todosQuizzes');
-    const quizzesUsuario = document.querySelector('.telaInicial .quizzesUsuario');
+
     let destinoQuizz;
-    todosQuizzes.innerHTML = "";
+    
+    if (JSON.parse(localStorage.getItem("quizzesUsuario")).ids.length !== 0){
+        comQuizzes.classList.remove("sumir")
+        semQuizzes.classList.remove("semQuizzes")
+        semQuizzes.classList.add("sumir")
+
+        sectionQuizzesUsuario.innerHTML = "";
+    }
+    else {
+        semQuizzes.classList.remove("sumir")
+        semQuizzes.classList.add("semQuizzes")
+        comQuizzes.classList.add("sumir")
+    }
 
     for(let i = 0; i < resposta.data.length; i++){
 
         if (verficaQuizz(resposta.data[i].id)){
-            destinoQuizz = quizzesUsuario;
-            mudarSeusQuizzes(quizzesUsuario);
-
-        }else{
+            destinoQuizz = sectionQuizzesUsuario;
+        }
+        else{
             destinoQuizz = todosQuizzes;
         }
+
         destinoQuizz.innerHTML += `
             <div class="quizz" 
             style="background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${resposta.data[i].image})"
@@ -68,21 +83,6 @@ function imprimirQuizzes(resposta){
             </div>`
     }
     sectionCarregando.classList.add('sumir');
-}
-
-function mudarSeusQuizzes(quizzesUsuario){
-    quizzesUsuario.innerHTML = `
-    <span class="subTitulo">
-        Seus Quizzes 
-        <ion-icon class="icone" name="add-circle-sharp" onclick="trocarTela(telaInicial, criarQuizzInfo)"></ion-icon> 
-    </span> `
-
-    quizzesUsuario.style = "border: none;"
-}
-
-function estilizarQuizzesUsuario(quizzesUsuario){
-    quizzesUsuario.innerHTML =`<div class="">  </div>`;
-    quizzesUsuario.style = "border: none;"
 }
 
 function verficaQuizz(quizz){

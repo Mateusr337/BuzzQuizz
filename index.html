@@ -23,9 +23,17 @@
     <section class="telaInicial">
         <main>
 
-            <div class="quizzesUsuario">
-                <span class="semQuizz">Você não criou nenhum <br> quizz ainda :(</span>
+            <div class="semQuizzes">
+                <span>Você não criou nenhum <br> quizz ainda :(</span>
                 <button onclick="trocarTela(telaInicial, criarQuizzInfo)">Criar Quizz</button>
+            </div>
+
+            <div class="comQuizzes">
+                <span class="subTitulo">
+                    Seus Quizzes 
+                    <ion-icon name="add-circle-sharp" onclick="trocarTela(telaInicial, criarQuizzInfo)"></ion-icon> 
+                </span> 
+                <div class="quizzesUsuario"></div>
             </div>
 
             <div>
