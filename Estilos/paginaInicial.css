@@ -166,6 +166,7 @@ header{
     position: absolute;
     right: 0;
     top: 25px;
+    z-index: 3;
 }
 
 .telaInicial .quizzesUsuario .iconesBonus ion-icon{
@@ -182,6 +183,56 @@ header{
     font-size: 25px;
 
     color: #EC362D;
+}
+
+.mensagemTela{
+    width: 100%;
+    height: 100%;
+
+    background-color: #FFFFFF;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: fixed;
+    z-index: 20;
+}
+
+.mensagemTela .conteudo{
+    gap: 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mensagemTela .conteudo span{
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.mensagemTela .conteudo .botoes {
+    display: flex;
+    gap: 25px;
+}
+
+.mensagemTela .conteudo .botoes button{
+    width: 100px;
+    height: 25px;
+
+    border-radius: 5px;
+    border: none;
+
+    font-weight: 900;
+}
+
+.mensagemTela .conteudo .botoes .sim{
+    background-color: rgb(0, 160, 0);
+}
+
+.mensagemTela .conteudo .botoes .nao{
+    background-color: rgb(160, 0, 0);
 }
 
   @media (max-width: 1100px){

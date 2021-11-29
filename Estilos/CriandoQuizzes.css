@@ -149,15 +149,4 @@
     .criandoQuizz main{
         width: 100%;
     }
-
-    .niveis .conteudo .descricaoNivel{
-        height: 180px;
-        position: relative;
-    }
-
-    .niveis .conteudo .descricaoNivel::placeholder{
-        position: absolute;
-        top: 15px;
-        left: 15px;
-    }
 }

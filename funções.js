@@ -9,6 +9,7 @@ const criarQuizzInfo = document.querySelector('.Info.criandoQuizz');
 const criarQuizzPerguntas = document.querySelector('.criandoQuizz.perguntas');
 const criarQuizzNiveis = document.querySelector('.criandoQuizz.niveis');
 const criandoQuizzFinal = document.querySelector('.criandoQuizz.geralQuizzDados');
+const TelaExcluirQuizz = document.querySelector('.mensagemTela');
 
 let respondidoCorretamente = 0;
 let quantidadePerguntasRespondidas = 0;
@@ -75,7 +76,7 @@ function imprimirQuizzes(resposta){
                 <span>${resposta.data[i].title}</span>
                 <div class="iconesBonus">
                     <ion-icon name="create-outline"></ion-icon>
-                    <ion-icon name="trash-outline"></ion-icon>
+                    <ion-icon name="trash-outline" onclick="ConfirmarApagarQuizz(${resposta.data[i].id}, event)"></ion-icon>
                 </div>
                 </div>`
         }
@@ -367,6 +368,8 @@ function enviarQuizzServidor(){
     const promessa = axios.post('https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes', quizzCriado);
 
     promessa.then((resposta) => {
+        console.log(resposta);
+
         trocarTela(criarQuizzNiveis, criandoQuizzFinal);
         sectionCarregando.classList.add('sumir');
 
@@ -413,4 +416,37 @@ function preenchendoDados(elementoSelecionado, tipoElemento){
     elementoSelecionado.classList.add('editando');
 
     topo.scrollIntoView({block: 'center', behavior: "smooth"});
+}
+
+let idApagarQuizz;
+
+function ConfirmarApagarQuizz(id, event){
+    
+    event.stopPropagation();
+    TelaExcluirQuizz.classList.remove('sumir');
+    idApagarQuizz = id;
+}
+
+function apagarQuizz(){
+    TelaExcluirQuizz.classList.add('sumir');
+
+    let quizzesUsuario = JSON.parse(localStorage.getItem("quizzesUsuario"));
+    let chave;
+    
+    for(let i = 0; i < quizzesUsuario.ids.length; i++){
+        if(idApagarQuizz === quizzesUsuario.ids[i]){
+            chave = quizzesUsuario.keys[i];
+        }
+    }
+    sectionCarregando.classList.remove('sumir');
+    const promessa = axios.delete(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${idApagarQuizz}`, { header: {'Secret-Key': chave}});
+
+    promessa.then(() => {
+        chamarQuizzes();
+        sectionCarregando.classList.add('sumir');
+    });
+
+    promessa.catch(() => {
+        sectionCarregando.classList.add('sumir');
+    })
 }
