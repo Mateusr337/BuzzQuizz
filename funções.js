@@ -423,6 +423,7 @@ let idApagarQuizz;
 function ConfirmarApagarQuizz(id, event){
     
     event.stopPropagation();
+
     TelaExcluirQuizz.classList.remove('sumir');
     idApagarQuizz = id;
 }
@@ -436,17 +437,24 @@ function apagarQuizz(){
     for(let i = 0; i < quizzesUsuario.ids.length; i++){
         if(idApagarQuizz === quizzesUsuario.ids[i]){
             chave = quizzesUsuario.keys[i];
+            
+            quizzesUsuario.keys.splice(i, 1);
+            quizzesUsuario.ids.splice(i, 1);
         }
     }
     sectionCarregando.classList.remove('sumir');
-    const promessa = axios.delete(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${idApagarQuizz}`, { header: {'Secret-Key': chave}});
+    const promessa = axios.delete(`https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${idApagarQuizz}`, { headers: {'Secret-Key': chave}});
 
     promessa.then(() => {
-        chamarQuizzes();
         sectionCarregando.classList.add('sumir');
+        
+        quizzesUsuario = JSON.stringify(quizzesUsuario);
+        localStorage.setItem("quizzesUsuario" , quizzesUsuario);
+
+        chamarQuizzes();
     });
 
     promessa.catch(() => {
-        sectionCarregando.classList.add('sumir');
+        //sectionCarregando.classList.add('sumir');
     })
 }
